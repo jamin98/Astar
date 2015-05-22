@@ -1,0 +1,1 @@
+bjam --with-python --toolset=msvc-10.0 --build-type=complete stage
