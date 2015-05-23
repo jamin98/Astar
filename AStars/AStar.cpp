@@ -114,6 +114,7 @@ void AStar::Find(int xBegin, int yBegin, int xEnd, int yEnd)
 			//计算G值和F值
 			tmpScoreG = CurrNode.m_ScoreF + ((CurrNode.m_Pos.x == (*it).x) || (CurrNode.m_Pos.y == (*it).y)) ? W_H_MOVE : SLANTMOVE;
 			tmpScoreF = tmpScoreG + (abs((*it).x - xEnd) + abs((*it).y - yEnd)) * W_H_MOVE;  //曼哈顿法
+			//return ((state.x - goal_location[0]) ** 2 + (state.y - goal_location[1]) ** 2) ** 0.5//欧氏距离的定义
 			//节点是否已在开放列表
 			if (IsInOpenList(*it))
 			{

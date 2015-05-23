@@ -29,7 +29,7 @@ typedef std::vector<unsigned char> ByteList;
 
 #define W_H_MOVE       10 //水平或竖直移动一格的花费
 #define SLANTMOVE      14 //斜向移动（沿着对角线移动方向）一格的花费
-#define MAXNODECOUNT   1024 //开放列表可保存的最大节点数
+#define MAXNODECOUNT   10240 //开放列表可保存的最大节点数
 
 
 
