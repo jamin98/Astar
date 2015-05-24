@@ -25,6 +25,7 @@ void export_astar()
 		.def("Find", &AStar::Find)
 		.def("IsOpen", &AStar::IsOpen)
 		.def("GetAstarPath", &AStar::GetAstarPath)
+		.def("FindBestPoint", &AStar::FindBestPoint)
 		;
 	/*
 	vector_from_seq_converter<int>();

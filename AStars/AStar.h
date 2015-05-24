@@ -8,6 +8,7 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include <deque>
 
 
 struct AstarPOINT
@@ -23,14 +24,15 @@ inline bool operator == (const AstarPOINT& a, const AstarPOINT& b)
 	return a.x == b.x && a.y == b.y;
 }
 
+
 typedef std::vector<int> IntList;
 typedef std::vector<float> FloatList;
 typedef std::vector<unsigned char> ByteList;
+typedef std::deque<AstarPOINT> POS_LIST;
 
 #define W_H_MOVE       10 //水平或竖直移动一格的花费
 #define SLANTMOVE      14 //斜向移动（沿着对角线移动方向）一格的花费
 #define MAXNODECOUNT   10240 //开放列表可保存的最大节点数
-
 
 
 //用于保存节点信息
@@ -62,6 +64,13 @@ public:
 	~AStar();
 
 	void Init(IntList Map, int w, int h); //加载
+
+	bool TestPoint(int x, int y, AstarPOINT& best);
+
+	//功能:返回路线附近的可走区域
+	//参数 目的地 x y
+	//返回: 失败返回 0, 0 成功返回实际可走坐标
+	AstarPOINT FindBestPoint(int x,int y);
 
 	//功能：寻路
 	//参数：xBegin——起始点X坐标 yBegin——起始点Y坐标
@@ -149,6 +158,8 @@ private:
 	Node* m_Node;                         //保存每个加入过开放列表的节点，ID为其索引值
 	NodeInfo** m_NodeInfo;                //该指针用于保存地图节点的信息，用节点坐标做索引可得到节点信息
 	int** m_Map;                          //地图指针  
-	int m_W, m_H;                          //地图宽高
-	PointList m_Path;              //保存路径坐标
+	int m_W, m_H;                         //地图宽高
+	PointList m_Path;                     //保存路径坐标
+	int** m_visited;                      //找附近路径 标记已访问
+	POS_LIST m_que;                       //找附近路径已经找队列
 };

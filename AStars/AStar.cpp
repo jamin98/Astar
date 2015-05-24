@@ -4,12 +4,9 @@ AStar::AStar()
 {
 	memset(m_OpenList, 0, sizeof(m_OpenList));
 	//memset(m_Node, 0, sizeof(m_Node));
-	m_OpenCount = 0;
-	m_OpenID = -1;                           //ID要作为索引值使用开始赋值为-1
 	m_NodeInfo = NULL;
 	m_Node = NULL;
 	m_Map = NULL;
-	m_Path.clear();
 	m_W = 0;
 	m_H = 0;
 }
@@ -23,12 +20,16 @@ AStar::~AStar()
 		m_Map[i] = NULL;
 		delete[m_W] m_NodeInfo[i];
 		m_NodeInfo[i] = NULL;
+		delete[m_W] m_visited[i];
+		m_visited[i] = NULL;
 	}
 
 	delete[m_H] m_Map;
 	m_Map = NULL;
 	delete[m_H] m_NodeInfo;
 	m_NodeInfo = NULL;
+	delete[m_H] m_visited;
+	m_visited = NULL;
 	delete [] m_Node;
 	m_Node = NULL;
 }
@@ -77,11 +78,95 @@ void AStar::Init(IntList Map, int w, int h)
 		assert(m_NodeInfo[i] != NULL);
 		memset(m_NodeInfo[i], 0, sizeof(NodeInfo)*w);
 	}
+
+	//初始化FindBestPoint数组
+	m_visited = new int*[h];
+	for (int i = 0; i < h; i++)
+	{
+		m_visited[i] = new int[w];
+		memset(m_visited[i], 0, sizeof(int)*w);
+	}
+}
+
+bool AStar::TestPoint(int x, int y, AstarPOINT& best)
+{
+	if(( x >=0 && x < m_W ) &&  ( y >=0 && y < m_H ))//此结点是否存在
+	{//如果存在
+		if(!m_visited[y][x])//检查是否已经访问
+		{//如果未访问
+			AstarPOINT Pt = {x, y};
+			if(IsOpen(Pt))//检查是否能
+			{//如果能通过
+				best = Pt; //返回最佳点
+				return true;//退出
+			}else
+			{//如果不能通过
+				m_visited[y][x] = 1;//标记已经访问
+				m_que.push_back(Pt);//放入队列
+			}
+		}//如果已经访问则忽略这个结点
+	}
+	return false;
+}
+
+AstarPOINT AStar::FindBestPoint(int x, int y)
+{
+	AstarPOINT Pt = {0, 0};
+	AstarPOINT best = {x, y};
+	if( x < 0 || x >= m_W  ||  y < 0 || y >= m_H )
+	{//此结点不合法
+		return Pt;
+	}
+	if(IsOpen(best))//检查是否能通过
+	{//如果能通过
+		return best;
+	}
+
+	//重新初始化数组
+	for (int i = 0 ; i < m_H; i++)
+	{
+		memset(m_visited[i], 0, sizeof(int)*m_W);
+	}
+		
+	m_visited[y][x] = 1;		//标记已访问
+
+	AstarPOINT u;
+	m_que.push_back(best);				//初始结点v入队列
+
+	while(!m_que.empty())			//队列非空时
+	{
+		u = m_que.front();m_que.pop_front();	//出队列
+		//右下
+		if(TestPoint(u.x+1, u.y+1, best))break;
+		//下
+		if(TestPoint(u.x, u.y+1, best))break;
+		//左下 
+		if(TestPoint(u.x-1, u.y+1, best))break;
+		//左 
+		if(TestPoint(u.x-1, u.y, best))break;
+		//左上
+		if(TestPoint(u.x-1, u.y-1, best))break;
+		//上 
+		if(TestPoint(u.x, u.y-1, best))break;
+		//右上
+		if(TestPoint(u.x+1, u.y-1, best))break;
+		//右 
+		if(TestPoint(u.x+1, u.y, best))break;
+	}
+	m_que.clear();
+	return best;
 }
 
 
 void AStar::Find(int xBegin, int yBegin, int xEnd, int yEnd)
 {
+	m_OpenCount = 0;
+	m_OpenID = -1;                           //ID要作为索引值使用开始赋值为-1
+	m_Path.clear();
+	for (int i = 0 ; i < m_H; i++)
+	{
+		memset(m_NodeInfo[i], 0, sizeof(NodeInfo)*m_W);
+	}
 	AstarPOINT PtBegin = {xBegin, yBegin};
 	OpenNote(PtBegin, 0, 0, 0);
 	Node CurrNode;
