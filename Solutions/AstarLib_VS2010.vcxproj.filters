@@ -7,6 +7,9 @@
     <Filter Include="Python">
       <UniqueIdentifier>{e2848250-eb5f-447e-8ae5-792889ebfdab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AStarEx">
+      <UniqueIdentifier>{ffb87b3e-2d68-48f9-b75f-6cd659467ae7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\AStars\AStar.cpp">
@@ -17,6 +20,9 @@
     </ClCompile>
     <ClCompile Include="..\python\export_astar.cpp">
       <Filter>Python</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AStarEx\AstarEx.cpp">
+      <Filter>AStarEx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +40,12 @@
     </ClInclude>
     <ClInclude Include="..\Python\convertor.h">
       <Filter>Python</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AStarEx\Node.h">
+      <Filter>AStarEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AStarEx\AstarEx.h">
+      <Filter>AStarEx</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

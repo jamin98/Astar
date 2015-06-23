@@ -1,9 +1,3 @@
-/*
- * @summary: recast config
- * @date: 2013-03-17
- * @author: zl
- */
-
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
@@ -20,5 +14,6 @@
 
 // detour includes
 #include "AStar.h"
+#include "AstarEx.h"
 
 #endif /* CONFIG_H_ */

@@ -1,4 +1,5 @@
 #include "AStar.h"
+using namespace AStars;
 
 AStar::AStar()
 {
@@ -88,13 +89,13 @@ void AStar::Init(IntList Map, int w, int h)
 	}
 }
 
-bool AStar::TestPoint(int x, int y, AstarPOINT& best)
+bool AStar::TestPoint(int x, int y, POINT& best)
 {
 	if(( x >=0 && x < m_W ) &&  ( y >=0 && y < m_H ))//此结点是否存在
 	{//如果存在
 		if(!m_visited[y][x])//检查是否已经访问
 		{//如果未访问
-			AstarPOINT Pt = {x, y};
+			POINT Pt = {x, y};
 			if(IsOpen(Pt))//检查是否能
 			{//如果能通过
 				best = Pt; //返回最佳点
@@ -109,10 +110,10 @@ bool AStar::TestPoint(int x, int y, AstarPOINT& best)
 	return false;
 }
 
-AstarPOINT AStar::FindBestPoint(int x, int y)
+POINT AStar::FindBestPoint(int x, int y)
 {
-	AstarPOINT Pt = {0, 0};
-	AstarPOINT best = {x, y};
+	POINT Pt = {0, 0};
+	POINT best = {x, y};
 	if( x < 0 || x >= m_W  ||  y < 0 || y >= m_H )
 	{//此结点不合法
 		return Pt;
@@ -130,7 +131,7 @@ AstarPOINT AStar::FindBestPoint(int x, int y)
 		
 	m_visited[y][x] = 1;		//标记已访问
 
-	AstarPOINT u;
+	POINT u;
 	m_que.push_back(best);				//初始结点v入队列
 
 	while(!m_que.empty())			//队列非空时
@@ -167,7 +168,7 @@ void AStar::Find(int xBegin, int yBegin, int xEnd, int yEnd)
 	{
 		memset(m_NodeInfo[i], 0, sizeof(NodeInfo)*m_W);
 	}
-	AstarPOINT PtBegin = {xBegin, yBegin};
+	POINT PtBegin = {xBegin, yBegin};
 	OpenNote(PtBegin, 0, 0, 0);
 	Node CurrNode;
 	memset(&CurrNode, 0, sizeof(Node));
@@ -218,7 +219,7 @@ void AStar::Find(int xBegin, int yBegin, int xEnd, int yEnd)
 			}
 			else //不再开放列表则将节点加入开放列表
 			{
-				AstarPOINT Point = {(*it).x, (*it).y};
+				POINT Point = {(*it).x, (*it).y};
 				OpenNote(Point, tmpScoreF, tmpScoreG, currID);
 			}
 		}
@@ -226,7 +227,7 @@ void AStar::Find(int xBegin, int yBegin, int xEnd, int yEnd)
 }
 
 
-void AStar::OpenNote(AstarPOINT Point, int ScoreF, int ScoreG, int FatherID)
+void AStar::OpenNote(POINT Point, int ScoreF, int ScoreG, int FatherID)
 {
 	m_OpenCount++;
 	m_OpenID++; 
@@ -312,19 +313,19 @@ void AStar::HeapBackSort()
 }
 
 
-bool AStar::IsInOpenList(AstarPOINT Point)
+bool AStar::IsInOpenList(POINT Point)
 {
 	return m_NodeInfo[Point.y][Point.x].m_InOpenList;
 }
 
 
-bool AStar::IsInCloseList(AstarPOINT Point)
+bool AStar::IsInCloseList(POINT Point)
 {
 	return m_NodeInfo[Point.y][Point.x].m_InCloseList;
 }
 
 
-void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
+void AStar::GetAroundNode(POINT Point, PointList *AroundNode)
 {
 	//每次获得前清空list
 	AroundNode->clear();
@@ -346,7 +347,7 @@ void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
 		if (m_Map[CurrY][CurrX] != 1)
 		{
 			LCanPass = true;
-			AstarPOINT tmpPoint = { CurrX, CurrY };
+			POINT tmpPoint = { CurrX, CurrY };
 			//是否在关闭列表
 			if (!IsInCloseList(tmpPoint))
 			{
@@ -366,7 +367,7 @@ void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
 		if (m_Map[CurrY][CurrX] != 1)
 		{
 			RCanPass = true;
-			AstarPOINT tmpPoint = { CurrX, CurrY };
+			POINT tmpPoint = { CurrX, CurrY };
 			if (!IsInCloseList(tmpPoint))
 			{
 				AroundNode->push_back(tmpPoint);
@@ -383,7 +384,7 @@ void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
 		if (m_Map[CurrY][CurrX] != 1)
 		{
 			UCanPass = true;
-			AstarPOINT tmpPoint = { CurrX, CurrY };
+			POINT tmpPoint = { CurrX, CurrY };
 			if (!IsInCloseList(tmpPoint))
 			{
 				AroundNode->push_back(tmpPoint);
@@ -400,7 +401,7 @@ void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
 		if (m_Map[CurrY][CurrX] != 1)
 		{
 			DCanPass = true;
-			AstarPOINT tmpPoint = { CurrX, CurrY };
+			POINT tmpPoint = { CurrX, CurrY };
 			if (!IsInCloseList(tmpPoint))
 			{
 				AroundNode->push_back(tmpPoint);
@@ -418,7 +419,7 @@ void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
 			//是否为障碍物
 			if (m_Map[CurrY][CurrX] != 1)
 			{
-				AstarPOINT tmpPoint = { CurrX, CurrY };
+				POINT tmpPoint = { CurrX, CurrY };
 				if (!IsInCloseList(tmpPoint))
 				{
 					AroundNode->push_back(tmpPoint);
@@ -437,7 +438,7 @@ void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
 			//是否为障碍物
 			if (m_Map[CurrY][CurrX] != 1)
 			{
-				AstarPOINT tmpPoint = { CurrX, CurrY };
+				POINT tmpPoint = { CurrX, CurrY };
 				if (!IsInCloseList(tmpPoint))
 				{
 					AroundNode->push_back(tmpPoint);
@@ -456,7 +457,7 @@ void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
 			//是否为障碍物
 			if (m_Map[CurrY][CurrX] != 1)
 			{
-				AstarPOINT tmpPoint = { CurrX, CurrY };
+				POINT tmpPoint = { CurrX, CurrY };
 				if (!IsInCloseList(tmpPoint))
 				{
 					AroundNode->push_back(tmpPoint);
@@ -475,7 +476,7 @@ void AStar::GetAroundNode(AstarPOINT Point, PointList *AroundNode)
 			//是否为障碍物
 			if (m_Map[CurrY][CurrX] != 1)
 			{
-				AstarPOINT tmpPoint = { CurrX, CurrY };
+				POINT tmpPoint = { CurrX, CurrY };
 				if (!IsInCloseList(tmpPoint))
 				{
 					AroundNode->push_back(tmpPoint);
@@ -498,19 +499,19 @@ int AStar::GetIndex(int ID)
 }
 
 
-void AStar::GetPath(AstarPOINT Point, int ID)
+void AStar::GetPath(POINT Point, int ID)
 {
 	int CurrX = m_Node[ID].m_Pos.x;
 	int CurrY = m_Node[ID].m_Pos.y;
 	while ((CurrX != Point.x) || (CurrY != Point.y))
 	{
-		AstarPOINT Pt = {CurrX, CurrY};
+		POINT Pt = {CurrX, CurrY};
 		m_Path.push_back(Pt);
 		ID = m_Node[ID].m_FatherID;
 		CurrX = m_Node[ID].m_Pos.x;
 		CurrY = m_Node[ID].m_Pos.y;
 	}
-	AstarPOINT Pt = {CurrX, CurrY};
+	POINT Pt = {CurrX, CurrY};
 	m_Path.push_back(Pt);
 }
 

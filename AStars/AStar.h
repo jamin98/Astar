@@ -10,52 +10,51 @@
 #include <vector>
 #include <deque>
 
-
-struct AstarPOINT
+namespace AStars
 {
-	int x, y;
-};
-typedef std::vector<AstarPOINT> PointList;
-/*
-Python lists have quite a bit more functionality than C++ vectors. vector_indexing_suite defines contains method among others, so your container class has to define operator==.
-*/
-inline bool operator == (const AstarPOINT& a, const AstarPOINT& b)
-{
-	return a.x == b.x && a.y == b.y;
-}
+	struct POINT
+	{
+		int x, y;
+	};
+	/*
+	Python lists have quite a bit more functionality than C++ vectors. vector_indexing_suite defines contains method among others, so your container class has to define operator==.
+	*/
+	inline bool operator == (const POINT& a, const POINT& b)
+	{
+		return a.x == b.x && a.y == b.y;
+	}
+
+	typedef std::vector<POINT> PointList;
+	typedef std::vector<int> IntList;
+	typedef std::vector<float> FloatList;
+	typedef std::vector<unsigned char> ByteList;
+	typedef std::deque<POINT> POS_LIST;
+
+	#define W_H_MOVE       10 //水平或竖直移动一格的花费
+	#define SLANTMOVE      14 //斜向移动（沿着对角线移动方向）一格的花费
+	#define MAXNODECOUNT   10240 //开放列表可保存的最大节点数
 
 
-typedef std::vector<int> IntList;
-typedef std::vector<float> FloatList;
-typedef std::vector<unsigned char> ByteList;
-typedef std::deque<AstarPOINT> POS_LIST;
+	//用于保存节点信息
+	struct NodeInfo 
+	{
+		int m_NodeID;        //节点ID
+		bool m_InOpenList;   //是否在开放列表中，true为在开放列表中，false不在开放列表中
+		bool m_InCloseList;  //是否在关闭列表中，true在关闭列表，false不在关闭列表
+	};
 
-#define W_H_MOVE       10 //水平或竖直移动一格的花费
-#define SLANTMOVE      14 //斜向移动（沿着对角线移动方向）一格的花费
-#define MAXNODECOUNT   10240 //开放列表可保存的最大节点数
+	//用于保存节点数据
+	struct Node
+	{
+		POINT m_Pos;             //节点坐标
+		int m_ScoreF;        //节点路径评分
+		int m_ScoreG;        //节点到起始点的路径评分
+		int m_FatherID;      //节点的父节点ID
+		//bool m_InOpenList;   //是否在开放列表中，true为在开放列表中，false不在开放列表中
+		//bool m_InCloseList;  //是否在关闭列表中，true在关闭列表，false不在关闭列表
+	};
 
-
-//用于保存节点信息
-struct NodeInfo 
-{
-	int m_NodeID;        //节点ID
-	bool m_InOpenList;   //是否在开放列表中，true为在开放列表中，false不在开放列表中
-	bool m_InCloseList;  //是否在关闭列表中，true在关闭列表，false不在关闭列表
-};
-
-//用于保存节点数据
-struct Node
-{
-	AstarPOINT m_Pos;             //节点坐标
-	int m_ScoreF;        //节点路径评分
-	int m_ScoreG;        //节点到起始点的路径评分
-	int m_FatherID;      //节点的父节点ID
-	//bool m_InOpenList;   //是否在开放列表中，true为在开放列表中，false不在开放列表中
-	//bool m_InCloseList;  //是否在关闭列表中，true在关闭列表，false不在关闭列表
-};
-
-
-
+	
 
 class AStar
 {
@@ -65,12 +64,12 @@ public:
 
 	void Init(IntList Map, int w, int h); //加载
 
-	bool TestPoint(int x, int y, AstarPOINT& best);
+	bool TestPoint(int x, int y, POINT& best);
 
 	//功能:返回路线附近的可走区域
 	//参数 目的地 x y
 	//返回: 失败返回 0, 0 成功返回实际可走坐标
-	AstarPOINT FindBestPoint(int x,int y);
+	POINT FindBestPoint(int x,int y);
 
 	//功能：寻路
 	//参数：xBegin——起始点X坐标 yBegin——起始点Y坐标
@@ -82,7 +81,7 @@ public:
 	//参数：Point——节点坐标 ScoreF——节点路径评分 
 	//      ScoreG——节点到起点路径评分 FatherID——节点的父节点ID
 	//返回：
-	void OpenNote(AstarPOINT Point, int ScoreF, int ScoreG,int FatherID);
+	void OpenNote(POINT Point, int ScoreF, int ScoreG,int FatherID);
 
 	//功能：为节点作加入关闭列表标记
 	//参数：ID——要做标记的节点ID
@@ -102,17 +101,17 @@ public:
 	//功能：判定节点是否在开放列表中
 	//参数：Point——要判定节点坐标
 	//返回：true——在开放列表 false——不在
-	bool IsInOpenList(AstarPOINT Point);
+	bool IsInOpenList(POINT Point);
 
 	//功能：判定节点是否在关闭列表中
 	//参数：Point——要判定节点坐标
 	//返回：true——在开放列表 false——不在
-	bool IsInCloseList(AstarPOINT Point);
+	bool IsInCloseList(POINT Point);
 	
 	//功能：获得节点的周围可通过节点
 	//参数：Point——节点坐标 AroundNode——用于保存周围节点坐标
 	//返回：
-	void GetAroundNode(AstarPOINT Point,PointList* AroundNode);
+	void GetAroundNode(POINT Point,PointList* AroundNode);
 
 	//功能：获得某ID节点在OpenList中索引
 	//参数：ID——要得到索引的节点ID
@@ -122,7 +121,7 @@ public:
 	//功能：将路径保存至链表m_Path中
 	//参数：Point——起点坐标 ID——终点ID
 	//返回：
-	void  GetPath(AstarPOINT Point,int ID);
+	void  GetPath(POINT Point,int ID);
 
 	//void Cout();
 
@@ -131,11 +130,15 @@ public:
 		return m_Path;
 	}
 
-	bool IsOpen(AstarPOINT Point)
+	bool IsOpen(POINT Point)
 	{
 		return m_Map[Point.y][Point.x] == 0;
 	}
 
+	void setMapPoint(int x, int y, int point)
+	{
+		m_Map[y][x] = point;
+	}
 
 	/*void Text()
 	{
@@ -163,3 +166,5 @@ private:
 	int** m_visited;                      //找附近路径 标记已访问
 	POS_LIST m_que;                       //找附近路径已经找队列
 };
+}
+

@@ -1,8 +1,3 @@
-/*
- * @summary: recast common
- * @date: 2013-03-20
- * @author: zl
- */
 
 #ifndef COMMON_H_
 #define COMMON_H_
