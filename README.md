@@ -58,6 +58,8 @@ python调用c++ A*寻路
         	.def("IsOpen", &AstarEx::IsOpen)
         	.def("FindBestPoint", &AstarEx::FindBestPoint)
         	.def("GetAstarPath", &AstarEx::GetAstarPath)
+		.def("setMapPoint", &AstarEx::setMapPoint)
+		.def("visual", &AstarEx::visual)
         	;
 
 ####boost编译
