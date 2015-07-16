@@ -15,37 +15,37 @@
     <ClCompile Include="..\AStars\AStar.cpp">
       <Filter>AStars</Filter>
     </ClCompile>
-    <ClCompile Include="..\python\export.cpp">
-      <Filter>Python</Filter>
-    </ClCompile>
-    <ClCompile Include="..\python\export_astar.cpp">
-      <Filter>Python</Filter>
-    </ClCompile>
     <ClCompile Include="..\AStarEx\AstarEx.cpp">
       <Filter>AStarEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Python\export.cpp">
+      <Filter>Python</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Python\export_astar.cpp">
+      <Filter>Python</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\AStars\AStar.h">
       <Filter>AStars</Filter>
     </ClInclude>
-    <ClInclude Include="..\Python\common.h">
-      <Filter>Python</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Python\config.h">
-      <Filter>Python</Filter>
-    </ClInclude>
-    <ClInclude Include="..\python\export_astar.h">
-      <Filter>Python</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Python\convertor.h">
-      <Filter>Python</Filter>
-    </ClInclude>
     <ClInclude Include="..\AStarEx\Node.h">
       <Filter>AStarEx</Filter>
     </ClInclude>
     <ClInclude Include="..\AStarEx\AstarEx.h">
       <Filter>AStarEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Python\config.h">
+      <Filter>Python</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Python\convertor.h">
+      <Filter>Python</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Python\export_astar.h">
+      <Filter>Python</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Python\common.h">
+      <Filter>Python</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

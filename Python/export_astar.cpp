@@ -58,6 +58,8 @@ void export_astar()
 		.def("IsOpen", &AstarEx::IsOpen)
 		.def("FindBestPoint", &AstarEx::FindBestPoint)
 		.def("GetAstarPath", &AstarEx::GetAstarPath)
+		.def("setMapPoint", &AstarEx::setMapPoint)
+		.def("visual", &AstarEx::visual)
 		;
 
 

@@ -3,19 +3,21 @@
 
 struct Node
 {
-    Node(int _x, int _y){
+    Node(int _x, int _y, bool wkb=true){
         x = _x;
         y = _y;
-		version = 1;
 		f = 0.0f;
 		g = 0.0f;
+		version = 1;
 		parent = NULL;
+		walkable = wkb;
     }
 	Node(){}
 	int x,y;
     float f,g;
     Node* parent;
     int version;
+	bool walkable;
 };
 inline bool operator == (const Node& a, const Node& b)
 {

@@ -16,14 +16,14 @@ AstarEx::~AstarEx()
 {
 	for (int i = 0; i < m_H; i++)
 	{
-		delete[] nodes[i];
+		delete[m_W] nodes[i];
 		nodes[i] = NULL;
 	}
-	delete[] nodes;
+	delete[m_H] nodes;
 	nodes = NULL;
 }
 
-void AstarEx::Init(IntList Map, int w, int h)
+void AstarEx::Init(IntList &Map, int w, int h)
 {
 	m_W = w;
 	m_H = h;
@@ -39,15 +39,31 @@ void AstarEx::Init(IntList Map, int w, int h)
 
 		//只需要关闭列表 后续可优化内存
 		for (int x = 0; x < w; x++) {
-			if(Map[y*h+x]!=1)
-				nodes[y][x] = Node(x,y);
+			//if(Map[y*h+x]!=1)
+				nodes[y][x] = Node(x,y,Map[y*h+x]!=1);
 		}
 	}
-    m_visited.resize(w*h, 0);
+}
+
+void AstarEx::setMapPoint(int x, int y, int point)
+{
+	if( x < 0 || x >= m_W  ||  y < 0 || y >= m_H )
+	{
+		return;
+	}
+	if (this->nodes[y]!=NULL&&point==1){
+		//memset(nodes[y]+x, 0, sizeof(Node));
+		nodes[y][x].walkable = false;
+	}else{
+		nodes[y][x].walkable = true;
+	}
 }
 
 bool AstarEx::findPath(int startX, int startY, int endX, int endY) {
-	if (nodes[startY]==NULL) {
+
+	if (nodes[startY]==NULL || (startX==endX&&startY==endY) 
+		||( startX < 1 || startX >= m_W  ||  startY < 1 || startY >= m_H )
+		||( endX < 1 || endX >= m_W  ||  endY < 1 || endY >= m_H )) {
 		return false;
 	}
 	path.clear();
@@ -62,13 +78,13 @@ bool AstarEx::findPath(int startX, int startY, int endX, int endY) {
 	Node *node = startNode;
 	while (node != endNode) {
 		for (int y = -1; y < 2; y++ ) {
-			if (node->y+y>-1&&node->y+y<=m_H) {
+			if (node->y+y>0&&node->y+y<m_H) {
 				Node* line = nodes[node->y+y];
 				for (int x = -1; x < 2; x++ ) {
 					if (y != 0 || x != 0) {
-						if(node->x+x>-1&&node->x+x<=m_W){
+						if(node->x+x>0&&node->x+x<m_W){
 							Node *test = &line[node->x + x];
-							if (test->version!=0){
+							if (test->walkable!=false){
 								float cost = 0.0;
 								if (x==0||y==0) {
 									cost = 1;
@@ -114,7 +130,7 @@ bool AstarEx::TestPoint(int x, int y, Point& best)
 {
 	if(( x >=0 && x < this->m_W ) &&  ( y >=0 && y < this->m_H ))//此结点是否存在
 	{//如果存在
-		if(!m_visited[y*this->m_H+x])//检查是否已经访问
+		if(m_visited[y*this->m_H+x]!=1)//检查是否已经访问
 		{//如果未访问
 			Point Pt = Point(x, y);
 			if(IsOpen(Pt))//检查是否能
@@ -146,6 +162,8 @@ Point AstarEx::FindBestPoint(int x, int y)
 
 	//重新初始化数组
 	m_visited.clear();
+	m_visited.resize(m_H*m_W, 0);
+	
 
 	m_visited[y*this->m_H+x] = 1;		//标记已访问
 
@@ -220,7 +238,26 @@ bool AstarEx::floydCrossAble(const Point &n1, const Point &n2) {
 	PointList ps = bresenhamNodes(n1, n2);
 	for (int i = ps.size() - 2; i > 0; i--){
 		int y = ps[i].y;
-		if (nodes[y]==NULL) {
+		int x = ps[i].x;
+		if (nodes[y][x].walkable!=true) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool AstarEx::visual(const Point &n1, const Point &n2) {
+	PointList &ps = bresenhamNodes(n1, n2);
+	//for (int i = ps.size()-1; i > 0; i--){
+	//	int y = ps[i].y;
+	//	int x = ps[i].x;
+	//	if (nodes[y][x].walkable!=true) {
+	//		return false;
+	//	}
+	//}
+	for (PointList::iterator it=ps.begin(); it!=ps.end();++it)
+	{
+		if (nodes[(*it).y][(*it).x].walkable!=true) {
 			return false;
 		}
 	}
@@ -238,7 +275,7 @@ PointList AstarEx::bresenhamNodes(Point p1, Point p2) {
 		p2.y = temp;
 	}
 	int stepX = p2.x > p1.x?1:(p2.x < p1.x? -1:0);
-	int	deltay = (p2.y - p1.y)/abs(p2.x-p1.x);
+	int	deltay = p2.x-p1.x!=0 ? (p2.y - p1.y)/abs(p2.x-p1.x):0;
 
 	PointList ret;
 	int nowX = p1.x + stepX;

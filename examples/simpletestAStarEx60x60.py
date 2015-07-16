@@ -43,7 +43,7 @@ tm_temp = [
 '#...........#..............................................#',
 '#...........#..............................................#',
 '#...........#..............................................#',
-'#............###########............################.......#',
+'#...........############............################.......#',
 '#..........................................................#',
 '#..........................................................#',
 '#..........................................................#',
@@ -117,8 +117,16 @@ def main():
     PathFinding_AStar = findPath.AStarEx()
     PathFinding_AStar.Init(IntList,mapWH[0],mapWH[1])
     
-    origin = find_empty_coordinates(PathFinding_AStar, mapWH[0]-1)
-    destination = find_empty_coordinates(PathFinding_AStar, mapWH[0]-1)
+    #origin = find_empty_coordinates(PathFinding_AStar, mapWH[0]-1)
+    #destination = find_empty_coordinates(PathFinding_AStar, mapWH[0]-1)
+    
+    for i in range(100):
+        temp = PathFinding_AStar.FindBestPoint(random.randint(1,59), random.randint(1,59))
+        PathFinding_AStar.setMapPoint(temp.x, temp.y, 1)
+    origin = PathFinding_AStar.FindBestPoint(random.randint(1,59), random.randint(1,59))
+    destination = PathFinding_AStar.FindBestPoint(random.randint(1,59), random.randint(1,59))
+    
+    
 
     StartTime = time.time()
     PathFinding_AStar.Find(origin.x, origin.y, destination.x, destination.y) #start x y  end x y
@@ -133,8 +141,10 @@ def main():
         print (p.x, p.y),
     print ''
     print_map_with_path(PathFinding_AStar, IntList, origin, destination, Path)
+    print (PathFinding_AStar.visual(origin, destination)) #判断2点直线是否存在障碍物
 
 if __name__ == '__main__':
+    #time.sleep(10)
     main()
     
     

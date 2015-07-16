@@ -87,7 +87,7 @@ namespace AStarEx
 		AstarEx();
 		~AstarEx();
 
-		void Init(IntList Map, int w, int h); //加载
+		void Init(IntList &Map, int w, int h); //加载
 
 		bool findPath(int startX, int startY, int endX, int endY);
 
@@ -101,7 +101,11 @@ namespace AStarEx
 
 		bool IsOpen(Point Point)
 		{
-			return nodes[Point.y][Point.x].version != 0;
+			if( Point.x < 0 || Point.x >= m_W  ||  Point.y < 0 || Point.y >= m_H )
+			{
+				return false;
+			}
+			return nodes[Point.y][Point.x].walkable==true;
 		}
 
 		PointQue GetAstarPath()
@@ -109,11 +113,14 @@ namespace AStarEx
 			return path;
 		}
 
+		void setMapPoint(int x, int y, int point);
+
+		bool visual(const Point &n1, const Point &n2);
 
 	private:
-		bool floydCrossAble(const Point &n1, const Point &n2);
-
 		PointList bresenhamNodes(Point p1, Point p2);
+
+		bool floydCrossAble(const Point &n1, const Point &n2);
 
 	private:
 		Node** nodes;							//保存每个加入过开放列表的节点，ID为其索引值

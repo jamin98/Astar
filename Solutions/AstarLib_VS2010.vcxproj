@@ -13,8 +13,8 @@
   <ItemGroup>
     <ClCompile Include="..\AStarEx\AstarEx.cpp" />
     <ClCompile Include="..\AStars\AStar.cpp" />
-    <ClCompile Include="..\python\export.cpp" />
-    <ClCompile Include="..\python\export_astar.cpp" />
+    <ClCompile Include="..\Python\export.cpp" />
+    <ClCompile Include="..\Python\export_astar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\AStarEx\AstarEx.h" />
@@ -23,7 +23,7 @@
     <ClInclude Include="..\Python\common.h" />
     <ClInclude Include="..\Python\config.h" />
     <ClInclude Include="..\Python\convertor.h" />
-    <ClInclude Include="..\python\export_astar.h" />
+    <ClInclude Include="..\Python\export_astar.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{546E8718-9F17-4FD1-BEAC-B94A979E2959}</ProjectGuid>
@@ -79,7 +79,7 @@
       <AdditionalIncludeDirectories>..\AStarEx;..\AStars;..\Python;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
