@@ -13,7 +13,6 @@
 #endif
 
 // detour includes
-#include "AStar.h"
 #include "AstarEx.h"
 
 #endif /* CONFIG_H_ */

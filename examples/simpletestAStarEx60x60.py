@@ -105,7 +105,7 @@ def print_map_with_path(aSatarClass, example, origin, destination, path):
     print print_str
 
 def main():
-    IntList = findPath.IntList() #vector<int>
+    IntList = findPath.AStarExIntList() #vector<int>
     for line in tm_temp:
         lineInfo = list(line)
         lineData = []

@@ -16,10 +16,10 @@ AstarEx::~AstarEx()
 {
 	for (int i = 0; i < m_H; i++)
 	{
-		delete[m_W] nodes[i];
+		delete[] nodes[i];
 		nodes[i] = NULL;
 	}
-	delete[m_H] nodes;
+	delete[] nodes;
 	nodes = NULL;
 }
 
@@ -247,7 +247,7 @@ bool AstarEx::floydCrossAble(const Point &n1, const Point &n2) {
 }
 
 bool AstarEx::visual(const Point &n1, const Point &n2) {
-	PointList &ps = bresenhamNodes(n1, n2);
+	const PointList &ps = bresenhamNodes(n1, n2);
 	//for (int i = ps.size()-1; i > 0; i--){
 	//	int y = ps[i].y;
 	//	int x = ps[i].x;
@@ -255,7 +255,7 @@ bool AstarEx::visual(const Point &n1, const Point &n2) {
 	//		return false;
 	//	}
 	//}
-	for (PointList::iterator it=ps.begin(); it!=ps.end();++it)
+	for (PointList::const_iterator it=ps.begin(); it!=ps.end();++it)
 	{
 		if (nodes[(*it).y][(*it).x].walkable!=true) {
 			return false;
