@@ -23,7 +23,7 @@ AstarEx::~AstarEx()
 	nodes = NULL;
 }
 
-void AstarEx::Init(IntList &Map, int w, int h)
+void AstarEx::Init(const IntList &Map, int w, int h)
 {
 	m_W = w;
 	m_H = h;
@@ -39,8 +39,8 @@ void AstarEx::Init(IntList &Map, int w, int h)
 
 		//只需要关闭列表 后续可优化内存
 		for (int x = 0; x < w; x++) {
-			//if(Map[y*h+x]!=1)
-				nodes[y][x] = Node(x,y,Map[y*h+x]!=1);
+			//if(Map[y*w+x]!=1)
+				nodes[y][x] = Node(x,y,Map[y*w+x]!=1);
 		}
 	}
 }
@@ -130,7 +130,7 @@ bool AstarEx::TestPoint(int x, int y, Point& best)
 {
 	if(( x >=0 && x < this->m_W ) &&  ( y >=0 && y < this->m_H ))//此结点是否存在
 	{//如果存在
-		if(m_visited[y*this->m_H+x]!=1)//检查是否已经访问
+		if(m_visited[y*this->m_W+x]!=1)//检查是否已经访问
 		{//如果未访问
 			Point Pt = Point(x, y);
 			if(IsOpen(Pt))//检查是否能
@@ -139,7 +139,7 @@ bool AstarEx::TestPoint(int x, int y, Point& best)
 				return true;//退出
 			}else
 			{//如果不能通过
-				m_visited[y*this->m_H+x] = 1;//标记已经访问
+				m_visited[y*this->m_W+x] = 1;//标记已经访问
 				m_que.push_back(Pt);//放入队列
 			}
 		}//如果已经访问则忽略这个结点
@@ -165,7 +165,7 @@ Point AstarEx::FindBestPoint(int x, int y)
 	m_visited.resize(m_H*m_W, 0);
 	
 
-	m_visited[y*this->m_H+x] = 1;		//标记已访问
+	m_visited[y*this->m_W+x] = 1;		//标记已访问
 
 	Point u;
 	m_que.push_back(best);				//初始结点v入队列

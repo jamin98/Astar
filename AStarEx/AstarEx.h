@@ -87,7 +87,7 @@ namespace AStarEx
 		AstarEx();
 		~AstarEx();
 
-		void Init(IntList &Map, int w, int h); //╪сть
+		void Init(const IntList &Map, int w, int h); //╪сть
 
 		bool findPath(int startX, int startY, int endX, int endY);
 

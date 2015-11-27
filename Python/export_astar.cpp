@@ -1,7 +1,10 @@
 #include "export_astar.h"
 #include "convertor.h"
 #include "common.h"
-#include "AstarEx.cpp"
+
+#ifdef linux
+	#include "AstarEx.cpp"
+#endif
 
 void export_astar()
 {
